@@ -36,7 +36,7 @@ class swarm:
         self.c3 = randomness  # Randomness scaling factor
 
         self.frames = sim_frames  # No. of frames
-        self.pspread = 5  # Spread of initial positions (gaussian)
+        self.pspread = 2  # Spread of initial positions (gaussian)
         self.vspread = 2  # Spread of initial velocitys (gaussian)
 
         # initiaized below
@@ -65,12 +65,10 @@ class swarm:
     
     def initialize(self):
         # positions
-        self.p = self.pspread*np.random.randn(3, self.N)
+        self.p = np.random.normal(loc=10, scale=self.pspread, size=(3, self.N))
         # velocities
         self.v = self.vspread*np.random.randn(3, self.N)
         self.v = self.v / np.linalg.norm(self.v, axis=0)
-        #self.fig = plt.figure()
-        #self.ax = self.fig.add_subplot(111)
 
     def ff_in_vision(self, n):
         ## KURT ##
