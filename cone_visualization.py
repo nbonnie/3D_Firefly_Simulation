@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt, numpy as np
+import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # Simulation Parameters
@@ -26,7 +26,6 @@ class firefly:
         # Identify which other fireflies are in vision
         return(None)
 """
-
 
 class swarm:
     def __init__(self, n, attraction, repulsion, randomness, sim_frames = 100):
@@ -93,7 +92,6 @@ class swarm:
         ff_detected = []
         for i in range(self.N):
             pt = self.p[:,i]
-
             # project point onto axis of cone
             cone_dist = np.dot(pt - cone_t, cone_v)
             if cone_dist > 0 and cone_dist <= cone_l:
@@ -105,11 +103,13 @@ class swarm:
             
         ### PLOTTING CONE AND DETECTED FIREFLIES ###
         vision_end = self.p[:,n] + cone_l * self.v[:,n]
+        #vision_end = self.p[:,n] + cone_l * np.array([0,1,0])  # test y-axis as vision
         cone_Br = cone_l * np.tan(cone_d * np.pi/180) # cone base radius
         
         ## Create 2 perpendicular vectors based on velocity
         # 1st vector
-        v1 = self.v[:,n] 
+        v1 = self.v[:,n]
+        #v1 = np.array([0,1,0]) # test y-axis as vision
         # 2nd vector
         v2 = np.random.randn(3)      # take a random vector
         v2 -= v2.dot(v1) * v1        # make it orthogonal to vel
@@ -152,12 +152,13 @@ class swarm:
         # plot axis of sight
         ax.plot(x2,y2,z2, color = "gray")  # vision vector
         
-        # make cone for sight of firefly
         for rad in vr:
             # make base of cone
             xr = np.linspace(vision_end[0]-cone_Br*rad[0], vision_end[0]+cone_Br*rad[0], 10)
             yr = np.linspace(vision_end[1]-cone_Br*rad[1], vision_end[1]+cone_Br*rad[1], 10)
             zr = np.linspace(vision_end[2]-cone_Br*rad[2], vision_end[2]+cone_Br*rad[2], 10)
+            # test length of vectors
+            #print(np.linalg.norm([xr[0]-xr[-1], yr[0]-yr[-1], zr[0]-zr[-1]]))
             ax.plot(xr,yr,zr, color="gray")
 
             # make edges of cone
@@ -166,10 +167,10 @@ class swarm:
 
         plt.title("Detected Fireflies")
 
-        ax.set_xlim3d(0,20)
-        ax.set_ylim3d(0,20)
-        ax.set_zlim3d(0,20)
-        
+        ax.set_xlim3d(-10,10)
+        ax.set_ylim3d(-10,10)
+        ax.set_zlim3d(-10,10)
+        ax.set_box_aspect([1,1,1])
         plt.show()
         
         return ff_detected
